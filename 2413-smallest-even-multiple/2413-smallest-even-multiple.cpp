@@ -1,13 +1,6 @@
 class Solution {
 public:
     int smallestEvenMultiple(int n) {
-        
-        for(int i=n; i<300; i++) {
-            if(i%n == 0 && i%2 == 0) {
-                return i;
-            }
-        }
-        
-        return -1;
+        return n%2 == 0? n: 2*n;
     }
 };

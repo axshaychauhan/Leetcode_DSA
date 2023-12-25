@@ -1,0 +1,25 @@
+class Solution {
+public:
+   void permuteRecursively(int index, vector<int> &arr, vector<vector<int>> &ans) {
+        // base case
+
+        if (index == arr.size()) {
+            // save the permutation
+            ans.push_back(arr);
+        }
+
+        for (int i = index; i < arr.size(); i++) {
+            swap(arr[index], arr[i]);                // swapping
+            permuteRecursively(index + 1, arr, ans); // next recursive call
+            swap(arr[index], arr[i]);                // backtrack
+        }
+    }
+
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> ans;
+
+        permuteRecursively(0, nums, ans);
+
+        return ans;
+    }
+};

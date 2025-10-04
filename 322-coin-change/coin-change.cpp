@@ -43,10 +43,25 @@ public:
         return dp[target] = mini;
     }
 
-    int coinChange(vector<int>& coins, int amount) {
-        vector<int> dp(amount + 1, -1);
+    int solveTab(vector<int>& coins, int target, vector<int>& dp) {
+        // Base case if target is zero means you found a way else you did not so
+        // return INT_MAX for min function.
+        dp[0] = 0;
 
-        int ans = solveMemo(coins, amount, dp);
+        // will try all coins
+        for (int t = 1; t <= target; t++) {
+            for (int i = 0; i < coins.size(); ++i) {
+                if (t - coins[i] >= 0 && dp[t - coins[i]] != INT_MAX) {
+    dp[t] = min(dp[t], 1 + dp[t - coins[i]]);
+}
+            }
+        }
+        return dp[target];
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount + 1, INT_MAX);
+
+        int ans = solveTab(coins, amount, dp);
         if (ans != INT_MAX)
             return ans;
         else

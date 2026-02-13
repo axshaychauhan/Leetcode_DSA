@@ -1,24 +1,37 @@
 class Solution {
 public:
-int solveRecursion(vector<int>& coins, int target, int index, vector<vector<int>>& dp) {
-    // Base Cases
-    if (target == 0) return 1;
-    if (target < 0) return 0;
-    if (index >= coins.size()) return 0;
+int solveBottomUp(int amount, vector<int>& coins) {
+    int n = coins.size();
+    // Create DP table: n rows, amount+1 columns
+    // Initialize with 0
+    vector<vector<int>> dp(n, vector<int>(amount + 1, 0));
 
-    if(dp[target][index] != -1)
-       return dp[target][index];
+    // Base Case: Target 0 is always 1 way
+    for (int i = 0; i < n; i++) dp[i][0] = 1;
+    
+    // Fill the table
+    for (int i = 0; i < n; i++) {
+        for (int j = 1; j <= amount; j++) {
+            long notTake = 0, take = 0;
+            // 1. Calculate 'Skip' (Not taking coin i)
+            // Be careful: if i == 0, there is no previous coin!
+            if( i != 0)
+              notTake = dp[i-1][j];
 
-    // 1. Take (Remember: you can reuse it!)
-    int take = solveRecursion(coins, target - coins[index], index, dp);
+            // 2. Calculate 'Take' (Taking coin i)
+            // Check if j >= coins[i] first
+            if(j >= coins[i]) 
+                take =  dp[i][j - coins[i]];
 
-    // 2. Skip c (Move to the next coin)
-    int skip = solveRecursion(coins, target, index + 1, dp);
-
-    return dp[target][index] = take + skip;
+            // Store sum
+            dp[i][j] = take + notTake;
+        }
+    }
+    
+    // The answer is at the last coin, full amount
+    return dp[n - 1][amount];
 }
     int change(int amount, vector<int>& coins) {
-        vector<vector<int>> dp(amount + 1, vector<int>(coins.size() + 1, -1));
-        return solveRecursion(coins, amount, 0, dp);
+        return solveBottomUp(amount, coins);
     }
 };

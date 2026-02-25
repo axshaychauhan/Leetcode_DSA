@@ -126,7 +126,7 @@ bool solveSpaceOptimized(string s1, string s2, string s3) {
        //    return false;
         
        // vector<vector<int>> dp(s1.length() + 1, vector<int>(s2.length() + 1, -1));
-       // return solveTab(s1, s2, s3);
-       return solveSpaceOptimized(s1, s2, s3);
+        return solveTab(s1, s2, s3);
+       //return solveSpaceOptimized(s1, s2, s3);
     }
 };

@@ -61,9 +61,39 @@ public:
         return int(dp[0][0]);
     }
 
+    int solve1DTab(string s, string t) {
+        
+        // STEP 1: A single 1D array of size t.length() + 1
+        vector<unsigned long long> dp(t.length() + 1, 0);
+
+        // STEP 2: The Base Case 
+        // When t is empty (index t.length()), we found 1 valid subsequence
+        dp[t.length()] = 1;
+
+
+        for(int i = s.length() - 1; i >= 0; --i) {
+            
+
+            for(int j = 0; j < t.length(); ++j) {
+                           
+                if (s[i] == t[j]) {
+                    dp[j] = dp[j] + dp[j+1];
+                } else {
+                    dp[j] = dp[j];
+                }
+            }
+        }
+
+        // Cast safely back to int per LeetCode's guarantee
+        return (int)dp[0];
+    }
+
+
     int numDistinct(string s, string t) { 
           //  vector<vector<long long>> dp(s.length() + 1,
          //                        vector<long long>(t.length() + 1, -1));
         // solveMemoiation(s, t, 0, 0, dp);
-        return solveTabulation(s,t); }
+       // return solveTabulation(s,t); 
+        return solve1DTab(s,t);
+        }
 };

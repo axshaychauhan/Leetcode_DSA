@@ -32,9 +32,22 @@ public:
         return dp[target] = mini;
     }
 
+    int solveTab(vector<int>& coins, int amount) {
+        vector<int> dp(amount + 1, INT_MAX);
+        dp[0] = 0;
+
+        for(int target = 1; target <= amount; ++target) {
+            for(int i = 0; i < coins.size(); ++i) {
+                if(target - coins[i] >= 0 && dp[target - coins[i]]  != INT_MAX)
+    dp[target] = min(dp[target],1 + dp[target - coins[i]]);
+           }
+        }
+
+        return dp[amount];
+    }
     int coinChange(vector<int>& coins, int amount) {
         vector<int> dp(amount + 1, -1);
-            int mini = solveMemoiation(coins, amount, dp);
+            int mini = solveTab(coins, amount);
             return mini == INT_MAX ? -1: mini;
     }
 };

@@ -14,6 +14,9 @@ public:
     int dfs(TreeNode* root, bool& isBalanced) {
         if(!root)
            return 0;
+           
+        if(!isBalanced)
+           return 0;
 
         int leftHeight = dfs(root->left, isBalanced);
         int rightHeight = dfs(root->right, isBalanced);

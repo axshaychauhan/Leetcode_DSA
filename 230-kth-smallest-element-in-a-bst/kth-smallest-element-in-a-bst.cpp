@@ -11,22 +11,18 @@
  */
 class Solution {
 public:
-    void dfs(TreeNode* root, int& count, int& kthVal){
-        if(!root)
-           return;
-        
-        dfs(root->left, count, kthVal);
-        --count;
-        if(count == 0) kthVal = root->val;
-        dfs(root->right,count, kthVal);
-
-        return;
-    }
-    int kthSmallest(TreeNode* root, int k) {
+    int dfs(TreeNode* root, int& count) {
         if(!root)
            return 0;
-        int kthVal = 0;
-         dfs(root, k, kthVal);
-         return kthVal;
+
+        int left = dfs(root->left, count);
+        if(left != 0) return left;
+
+        if(--count == 0) return root->val;
+
+        return dfs(root->right, count);
+    }
+    int kthSmallest(TreeNode* root, int k) {
+        return dfs(root,k);
     }
 };

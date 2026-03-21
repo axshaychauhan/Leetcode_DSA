@@ -11,22 +11,22 @@
  */
 class Solution {
 public:
-  void dfs(TreeNode* root, vector<int>& list) {
+  void dfs(TreeNode* root,long& prevNodeVal, bool& isValid) {
         if(!root)
            return;
         
-        dfs(root->left, list);
-        list.push_back(root->val);
-        dfs(root->right, list);
+        dfs(root->left, prevNodeVal, isValid);
+        if(root->val <= prevNodeVal) isValid = false;
+        prevNodeVal = root->val;
+        dfs(root->right, prevNodeVal, isValid);
 
     }
+    
     bool isValidBST(TreeNode* root) {
-        vector<int> list;
-        dfs(root, list);
-        for(int i = 0; i<list.size()-1; ++i) {
-            if(list[i] >= list[i+1])
-               return false;
-        }
-        return true;
+        bool isValid {true};
+        long prevMinNode = LONG_MIN;
+        dfs(root, prevMinNode, isValid);
+        return isValid;
+       
     }
 };

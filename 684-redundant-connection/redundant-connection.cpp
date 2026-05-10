@@ -1,33 +1,29 @@
 class Solution {
 public:
-    vector<int> parent;
     vector<int> rank;
+    vector<int> parent;
 
     int find(int node) {
-        if(node == parent[node]){
+        if(node == parent[node])
             return node;
-        }
-
         return parent[node] = find(parent[node]);
     }
 
-    bool unionFind(int u, int v) {
-        int rootU = find(u);
-        int rootV = find(v);
+    bool unionMerge(int u, int v) {
+        int parentU = find(u);
+        int parentV = find(v);
 
-        if(rootU == rootV) {
-            return false;
-        }
+        if(parentU == parentV) return false; //cycle
 
-        if(rank[rootU] > rank[rootV]){
-            parent[rootV] = rootU;
+        if(rank[parentU] > rank[parentV]) {
+            parent[parentV] = parentU;
         }
-        else if(rank[rootU] < rank[rootV]){
-            parent[rootU] = rootV;
+        else if(rank[parentV] > rank[parentU]) {
+            parent[parentU] = parentV;
         }
         else {
-            parent[rootV] = rootU;
-            rank[rootU]++;
+            parent[parentU] = parentV;
+            rank[parentV]++;
         }
 
         return true;
@@ -38,14 +34,13 @@ public:
         parent.resize(n+1);
         rank.resize(n+1, 1);
 
-        for(int i = 1; i<=n; ++i) {
-            parent[i] = i;
-        }
+        for(int i = 1; i<=n; ++i) parent[i] = i;
 
-        for(auto edge: edges) {
-            if(!unionFind(edge[0], edge[1]))
+        for(const auto& edge: edges) {
+            if(!unionMerge(edge[0], edge[1]))
                 return edge;
         }
+
         return {};
     }
 };

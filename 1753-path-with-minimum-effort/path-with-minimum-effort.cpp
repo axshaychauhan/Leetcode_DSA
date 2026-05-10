@@ -19,21 +19,18 @@ public:
         vector<vector<int>> minEfforts(maxRowSize,
                                        vector<int>(maxColSize, INT_MAX));
 
-        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>>
+        priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, greater<tuple<int,int,int>>>
             pq;
 
         pq.push({0, 0, 0});
         minEfforts[0][0] = 0;
 
         while (!pq.empty()) {
-            auto curr = pq.top();
+            auto [effort, row, col] = pq.top();
             pq.pop();
-            int effort = curr[0];
-            int row = curr[1];
-            int col = curr[2];
 
             if (row == maxRowSize - 1 && col == maxColSize - 1) {
-                return effort;
+                return effort; //do not return minEffort[row][col] it can contain stale effort
             }
 
             if(effort > minEfforts[row][col]) continue; // if effort is greater via this path then continue

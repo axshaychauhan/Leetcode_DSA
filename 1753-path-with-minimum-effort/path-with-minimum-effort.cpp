@@ -1,50 +1,62 @@
 class Solution {
 public:
     int minimumEffortPath(vector<vector<int>>& heights) {
-        //define directions array
-        //define distance 2d array
-        //define priority quueue
-        //add topleft cell into quque
-        //traverse queue 
-        //if you reach bottom right direction return effort
-        //if distance > distance[cell] continue;
-        //loop through all directions
-        //check if they are inbound
-        //if efforts of current cell + neghbouring cells < distance[neighbouring cell] update it
-        //keep doing this
-        int rowSize = heights.size();
-        int colSize = heights[0].size();
+        // defind direction array
+        // define 2D minimum efforts array
+        // define priority queue [effort, row, col]
+        // insert top left cell in pq
+        // traverse pq
+        // if cell is bottom right return miniEfforts[cell]
+        // if efforts is
+        // check all four direction
+        // check if they are inbound
+        // check if absolute difference beetwin current cell and new cell
+        // if its less then update miniEffort
+        int maxRowSize = heights.size();
+        int maxColSize = heights[0].size();
+        int directions[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
-        int directions[4][2] = {{-1,0}, {1, 0} ,{0, -1}, {0, 1}};
-        
+        vector<vector<int>> minEfforts(maxRowSize,
+                                       vector<int>(maxColSize, INT_MAX));
 
-        vector<vector<int>> distance(rowSize, vector<int>(colSize, INT_MAX));
-        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
-        pq.push({0,0,0});
-        distance[0][0] = 0;
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>>
+            pq;
 
-        while(!pq.empty()) {
-            int effort = pq.top()[0];
-            int row = pq.top()[1];
-            int col = pq.top()[2];
+        pq.push({0, 0, 0});
+        minEfforts[0][0] = 0;
+
+        while (!pq.empty()) {
+            auto curr = pq.top();
             pq.pop();
+            int effort = curr[0];
+            int row = curr[1];
+            int col = curr[2];
 
-            if(row == rowSize - 1 && col == colSize - 1) return effort;
+            if (row == maxRowSize - 1 && col == maxColSize - 1) {
+                return effort;
+            }
 
-            if(effort > distance[row][col]) continue;
+            if(effort > minEfforts[row][col]) continue; // if effort is greater via this path then continue
 
-            for(auto& dir : directions) {
-                int nRow = row + dir[0];
-                int nCol = col + dir[1];
+            for (auto dir : directions) {
+                int nRow = dir[0] + row;
+                int nCol = dir[1] + col;
 
-                if(nRow < 0 || nCol < 0 || nRow >= rowSize || nCol >= colSize) continue;
-                int newEffort = max(effort, abs(heights[row][col] - heights[nRow][nCol]));
-                if(newEffort < distance[nRow][nCol]) {
-                    distance[nRow][nCol] = newEffort;
-                    pq.push({distance[nRow][nCol], nRow, nCol});
+                if (nRow >= 0 && nRow < maxRowSize && nCol >= 0 &&
+                    nCol < maxColSize) {
+                    int newHeight = heights[nRow][nCol];
+                    int currHeight = heights[row][col];
+                    int jump = abs(currHeight - newHeight);
+                    int newEffort = max(effort, jump);//newEffort will be max of current Jump and previous Max Effort
+
+                    if (newEffort < minEfforts[nRow][nCol]) {
+                        minEfforts[nRow][nCol] = newEffort;
+                        pq.push({newEffort, nRow, nCol});
+                    }
                 }
             }
         }
+
         return 0;
     }
 };

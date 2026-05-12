@@ -1,54 +1,40 @@
 class Solution {
 public:
-    void dfs(int row, int col, vector<vector<char>>& board) {
-         int n = board.size();
-         int m = board[0].size();
+    void dfs(int row, int col, vector<vector<char>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
 
-         if(row < 0 || col < 0 || row >= n || col >= m || board[row][col] != 'O')
-         return;
+        if(row < 0 || col < 0 || row >= m || col >= n || grid[row][col] != 'O') return;
 
-         board[row][col] = 'T';
+        grid[row][col] = 'T';
 
-         dfs(row + 1, col, board);
-         dfs(row - 1, col, board);
-         dfs(row, col + 1, board);
-         dfs(row, col - 1, board);
-
+        dfs(row - 1, col, grid);
+        dfs(row + 1, col, grid);
+        dfs(row, col + 1, grid);
+        dfs(row, col - 1, grid);
     }
     void solve(vector<vector<char>>& board) {
-        //Marks Borders Regions
-        int n = board.size();
-        int m = board[0].size();
-        int topRow = 0;
-        int bottomRow = n - 1;
-        int leftCol = 0;
-        int rightCol = m - 1;
+        int maxRow = board.size();
+        int maxCol = board[0].size();
 
-        for(int col = 0; col <m; ++col) {
-            if(board[topRow][col] == 'O') {
-                dfs(topRow, col, board);
-            }
-            if(board[bottomRow][col] == 'O') {
-                dfs(bottomRow, col, board);
-            }
-        }
-        for(int row = 0; row < n; ++row) {
-            if(board[row][leftCol] == 'O') {
-                dfs(row, leftCol, board);
-            }
-            if(board[row][rightCol] == 'O') {
-                dfs(row, rightCol, board);
-            }
+        //traverse from boundary and mark all o and coonected o to T
+        //traverse again and mark remaining O X and T back to O.
+
+        for(int row = 0; row < maxRow; ++row) {
+            dfs(row, 0, board);
+            dfs(row, maxCol-1, board);
         }
 
-        for(int row = 0; row<n; ++row) {
-            for(int col = 0; col <m; ++ col) {
-                if(board[row][col] == 'O')
-                    board[row][col] = 'X';
-                else if(board[row][col] == 'T')
-                    board[row][col] = 'O';
+        for(int col = 0; col < maxCol; ++col) {
+            dfs(0, col, board);
+            dfs(maxRow - 1, col, board);
+        }
+
+        for(int r = 0 ; r < maxRow; ++r) {
+            for(int c = 0; c < maxCol; ++c) {
+                if(board[r][c] == 'O') board[r][c] = 'X';
+                if(board[r][c] == 'T') board[r][c] = 'O';
             }
         }
-        
     }
 };

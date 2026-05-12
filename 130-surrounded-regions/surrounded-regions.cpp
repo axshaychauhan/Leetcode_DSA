@@ -21,13 +21,13 @@ public:
         //traverse again and mark remaining O X and T back to O.
 
         for(int row = 0; row < maxRow; ++row) {
-            dfs(row, 0, board);
-            dfs(row, maxCol-1, board);
+            if(board[row][0] == 'O') dfs(row, 0, board);
+            if(board[row][maxCol-1] == 'O') dfs(row, maxCol-1, board);
         }
 
         for(int col = 0; col < maxCol; ++col) {
-            dfs(0, col, board);
-            dfs(maxRow - 1, col, board);
+             if(board[0][col] == 'O')dfs(0, col, board);
+             if(board[maxRow - 1][col] == 'O')dfs(maxRow - 1, col, board);
         }
 
         for(int r = 0 ; r < maxRow; ++r) {

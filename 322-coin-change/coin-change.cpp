@@ -6,28 +6,26 @@ public:
 
         int mini = INT_MAX;
         for (int coin : coins) {
-            if(coin <= amount){
-            int sub = solve(coins, amount - coin);
-            if (sub != INT_MAX)
-                mini = min(mini, 1 + sub);
+            if (coin <= amount) {
+                int sub = solve(coins, amount - coin);
+                if (sub != INT_MAX)
+                    mini = min(mini, 1 + sub);
             }
         }
         return mini;
     }
     int coinChange(vector<int>& coins, int amount) {
-
-        vector<int> dp(amount + 1, INT_MAX);
+        sort(coins.begin(), coins.end());
+        vector<int> dp(amount + 1, amount + 1);
 
         dp[0] = 0;
-        for(int target = 1; target <= amount; ++target) {
-            for(int coin: coins) {
-                if(coin <= target && dp[target - coin] != INT_MAX) {
-                    dp[target] = min(dp[target], 1 + dp[target - coin]);
-                }
+        for (int target = 1; target <= amount; ++target) {
+            for (int coin : coins) {
+                if (coin > target)
+                    break;
+                dp[target] = min(dp[target], 1 + dp[target - coin]);
             }
         }
-        return dp[amount] == INT_MAX ? -1 : dp[amount];
+        return dp[amount] > amount ? -1 : dp[amount];
     }
-
-
 };

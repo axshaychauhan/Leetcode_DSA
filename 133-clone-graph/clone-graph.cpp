@@ -18,27 +18,46 @@ public:
     }
 };
 */
+//DFS
 unordered_map<Node*, Node*> mp;
-Node* dfs(Node* node){
-    if(!node) return node;
+// Node* dfs(Node* node){
+//     if(!node) return node;
 
-    if(mp.find(node) != mp.end()){
-        return mp[node];
-    }
+//     if(mp.find(node) != mp.end()){
+//         return mp[node];
+//     }
 
-    Node* clone = new Node(node->val);
-    mp[node] = clone;
+//     Node* clone = new Node(node->val);
+//     mp[node] = clone;
 
-    for(auto n: node->neighbors){
-        clone->neighbors.push_back(dfs(n));
-    }
+//     for(auto n: node->neighbors){
+//         clone->neighbors.push_back(dfs(n));
+//     }
 
-    return clone;
+//     return clone;
 
-}
+// }
 class Solution {
 public:
     Node* cloneGraph(Node* node) {
-        return dfs(node);
+       if(!node) return node;
+       queue<Node*> q;
+       q.push(node);
+       mp[node] = new Node(node->val);
+
+       while(!q.empty()) {
+        Node* curr = q.front();
+        q.pop();
+
+        for(auto N: curr->neighbors){
+            if(mp.find(N) == mp.end()){
+                mp[N] = new Node(N->val);
+                q.push(N);
+            }
+            mp[curr]->neighbors.push_back(mp[N]);
+        }
+       }
+
+       return mp[node];
     }
 };

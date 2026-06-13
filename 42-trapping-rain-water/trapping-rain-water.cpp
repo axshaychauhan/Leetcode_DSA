@@ -1,24 +1,25 @@
 class Solution {
 public:
     int trap(vector<int>& height) {
-        int size = int(height.size());
-        vector<int> maxLeft(size);
-        maxLeft[0] = height[0];
-        vector<int> maxRight(size);
-        maxRight[size - 1] = height[size - 1];
+        int N = int(height.size());
+        int left = 0;
+        int right = N-1;
+        int leftMax = 0;
+        int rightMax = 0;
+        int water = 0;
+        while(left < right){
+            if(height[left] < height[right]){
+                leftMax = max(leftMax, height[left]);
+                water += leftMax - height[left];
+                ++left;
+            }
+            else {
+                rightMax = max(rightMax, height[right]);
+                water += rightMax - height[right];
+                --right;
+            }
+        }
 
-        for (int i = 1; i < size; ++i) {
-            maxLeft[i] = max(maxLeft[i - 1], height[i]);
-        }
-        for (int j = size - 2; j >= 0; --j) {
-            maxRight[j] = max(maxRight[j + 1], height[j]);
-        }
-
-        int totalTappedWater = 0;
-        for(int i = 0; i< size; ++i){
-             totalTappedWater += min(maxLeft[i] , maxRight[i]) - height[i];
-            
-        }
-        return totalTappedWater;
+        return water;
     }
 };

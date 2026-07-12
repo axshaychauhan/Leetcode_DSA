@@ -12,22 +12,13 @@ public:
     void createParentMap(TreeNode*  root, unordered_map<TreeNode*, TreeNode*>& parent) {
         if(!root)
            return;
-        queue<TreeNode*> q;
-        q.push(root);
-        while(!q.empty()) {
-            int size = q.size();
-
-            for(int i = 0; i<size; ++i) {
-                TreeNode* node = q.front(); q.pop();
-                if(node->left) {
-                    parent[node->left] = node;
-                    q.push(node->left);
-                }
-                if(node->right) {
-                    parent[node->right] = node;
-                    q.push(node->right);
-                }
-            }
+        if(root->left){
+            parent[root->left] = root;
+            createParentMap(root->left, parent);
+        }
+        if(root->right){
+            parent[root->right] = root;
+            createParentMap(root->right, parent);
         }
     }
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {

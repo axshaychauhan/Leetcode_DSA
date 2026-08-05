@@ -1,29 +1,29 @@
 class Solution {
 public:
-    int expandAroundCenter(string& s, int start, int end) {
-
-        while (start >= 0 && end < s.length() && s[start] == s[end]) {
-            --start;
-            ++end;
+    string expand(int left, int right, string s){
+        while(left >= 0 && right < s.size() && s[left] == s[right]){
+            --left;
+            ++right;
         }
 
-        return end - start - 1;
+        return s.substr(left+1, right - left - 1);
     }
     string longestPalindrome(string s) {
-       int start = 0;
-       int max_length = 0;
+        int n = s.size();
 
-        for (int i = 0; i < s.length(); ++i) {
-            int oddPalinLength = expandAroundCenter(s, i, i);
-            int evenPalinLength = expandAroundCenter(s, i, i + 1);
+        string longest = "";
 
-            int tempMaxLength = oddPalinLength > evenPalinLength ? oddPalinLength : evenPalinLength;
+        for(int i = 0; i<n; ++i){
+            string odd = expand(i,i,s);
+            string even = expand(i, i+1, s);
 
-            if(tempMaxLength > max_length) {
-                start = i - (tempMaxLength - 1) / 2;
-                max_length = tempMaxLength;
+            string currLong = odd.size() > even.size() ? odd: even;
+
+            if(currLong.size() > longest.size()){
+                longest = currLong;
             }
         }
-        return s.substr(start, max_length);
+
+        return longest;
     }
 };

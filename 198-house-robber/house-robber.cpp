@@ -22,7 +22,23 @@ public:
 
         return dp[index] = max(pick, notPick);
     }
+
+    int optimized(vector<int>& nums, int n){
+        if(n == 1) return nums[0];
+
+        int prev2 = nums[0];
+        int prev1 = max(nums[0], nums[1]);
+
+        for(int i = 2; i<n; ++i){
+            int curr = max(nums[i] + prev2, prev1);
+            prev2 = prev1;
+            prev1 = curr;
+        }
+
+        return prev1;
+    }
     int rob(vector<int>& nums) {
+        return optimized(nums,nums.size());
         if(nums.size() == 1) return nums[0];
         vector<int> dp (nums.size(), 0);
        // return solveMemo(nums,0, dp);

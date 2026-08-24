@@ -1,30 +1,24 @@
 class Solution {
 public:
-    vector<int> topKFrequent(vector<int>& nums, int k) {
+   vector<int> topKFrequent(vector<int>& nums, int k) {
+    unordered_map<int, int> freq;
+    for (int num : nums) freq[num]++;
 
-        auto cmp = [](pair<int, int>& a, pair<int, int>& b) {
-            return a.second > b.second;
-        };
+    // (frequency, value) — frequency FIRST, because pair compares .first first,
+    // so plain greater<> gives a min-heap BY FREQUENCY. No lambda, no decltype.
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
 
-        unordered_map<int, int> freq;
-        for (int num : nums)
-            freq[num]++;
-
-        priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)>
-            pq(cmp);
-
-        for (auto element : freq) {
-            pq.push(element);
-            if (pq.size() > k)
-                pq.pop();
-        }
-
-        vector<int> ans;
-        while (!pq.empty()) {
-            ans.push_back(pq.top().first);
-            pq.pop();
-        }
-
-        return ans;
+    for (const auto& [value, count] : freq) {     // reference — no pair copies
+        pq.push({count, value});                  // flipped at the door
+        if ((int)pq.size() > k) pq.pop();         // cast — no sign-compare warning
     }
+
+    vector<int> ans;
+    ans.reserve(k);
+    while (!pq.empty()) {
+        ans.push_back(pq.top().second);           // flipped at the exit too
+        pq.pop();
+    }
+    return ans;
+}
 };

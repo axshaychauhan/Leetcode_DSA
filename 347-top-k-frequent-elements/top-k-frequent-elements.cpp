@@ -6,7 +6,7 @@ public:
             return a.second > b.second;
         };
 
-        map<int, int> freq;
+        unordered_map<int, int> freq;
         for (int num : nums)
             freq[num]++;
 
